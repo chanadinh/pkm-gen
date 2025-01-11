@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --gba-purple: #332640;
+  --gba-purple-light: #4A3B55;
+  --gba-screen: #7BA1A8;
+  --gba-screen-dark: #5A8087;
+  --gba-accent: #E0757C;
+  --gba-button: #2D1B2E;
+}
+
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  image-rendering: pixelated;
+  background: linear-gradient(135deg, var(--gba-purple) 0%, var(--gba-purple-light) 100%);
+}
+
+@layer components {
+  .gba-container {
+    @apply bg-[#332640] p-6 rounded-2xl shadow-xl border-2 border-[#4A3B55];
+  }
+  
+  .gba-screen {
+    @apply bg-[#7BA1A8] p-4 rounded-lg border-4 border-[#5A8087] shadow-inner;
+  }
+  
+  .gba-button {
+    @apply px-4 py-2 bg-[#2D1B2E] text-[#E0757C] rounded-lg 
+    hover:bg-[#4A3B55] transition-colors duration-200
+    active:transform active:scale-95 font-bold
+    border-2 border-[#E0757C] shadow-md;
+  }
+
+  .gba-input {
+    @apply bg-[#5A8087] text-white rounded-lg p-2 
+    border-2 border-[#7BA1A8] focus:outline-none 
+    focus:border-[#E0757C] transition-colors duration-200;
+  }
+}
