@@ -382,6 +382,10 @@ img, video {
   outline-offset: 2px;
 }
 
+.relative {
+  position: relative;
+}
+
 .mx-auto {
   margin-left: auto;
   margin-right: auto;
@@ -423,6 +427,14 @@ img, video {
   height: auto;
 }
 
+.h-32 {
+  height: 8rem;
+}
+
+.h-64 {
+  height: 16rem;
+}
+
 .min-h-screen {
   min-height: 100vh;
 }
@@ -433,6 +445,14 @@ img, video {
 
 .w-full {
   width: 100%;
+}
+
+.w-32 {
+  width: 8rem;
+}
+
+.w-64 {
+  width: 16rem;
 }
 
 .max-w-\[640px\] {
@@ -499,6 +519,10 @@ img, video {
 .bg-\[\#E0757C\] {
   --tw-bg-opacity: 1;
   background-color: rgb(224 117 124 / var(--tw-bg-opacity, 1));
+}
+
+.object-contain {
+  object-fit: contain;
 }
 
 .p-4 {

@@ -10,10 +10,12 @@ __turbopack_esm__({
 });
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_import__("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_import__("[project]/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$image$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_import__("[project]/node_modules/next/image.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$openai$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_import__("[project]/node_modules/openai/index.mjs [app-client] (ecmascript) <locals>");
 ;
 var _s = __turbopack_refresh__.signature();
 'use client';
+;
 ;
 ;
 const openai = new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$openai$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__["OpenAI"]({
@@ -52,6 +54,31 @@ function GeneratePage() {
     const [imageUrl, setImageUrl] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])('');
     const [error, setError] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])('');
     const [pokemonName, setPokemonName] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])('');
+    const [isPlaying, setIsPlaying] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    // Handle audio playback during loading
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "GeneratePage.useEffect": ()=>{
+            const audio = new Audio('/loading-sound.mp3');
+            audio.loop = true;
+            if (loading && !isPlaying) {
+                audio.play().then({
+                    "GeneratePage.useEffect": ()=>setIsPlaying(true)
+                }["GeneratePage.useEffect"]).catch({
+                    "GeneratePage.useEffect": (err)=>console.error('Audio playback failed:', err)
+                }["GeneratePage.useEffect"]);
+            }
+            return ({
+                "GeneratePage.useEffect": ()=>{
+                    audio.pause();
+                    audio.currentTime = 0;
+                    setIsPlaying(false);
+                }
+            })["GeneratePage.useEffect"];
+        }
+    }["GeneratePage.useEffect"], [
+        loading,
+        isPlaying
+    ]);
     const handleSubmit = async (e)=>{
         e.preventDefault();
         setLoading(true);
@@ -64,7 +91,7 @@ function GeneratePage() {
             const response = await openai.images.generate({
                 prompt: enhancedPrompt,
                 n: 1,
-                size: "256x256",
+                size: "512x512",
                 response_format: "url"
             });
             if (response.data[0]?.url) {
@@ -87,7 +114,7 @@ function GeneratePage() {
                 children: "Generate Pokemon"
             }, void 0, false, {
                 fileName: "[project]/src/app/generate/page.tsx",
-                lineNumber: 78,
+                lineNumber: 98,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -104,7 +131,7 @@ function GeneratePage() {
                             rows: 4
                         }, void 0, false, {
                             fileName: "[project]/src/app/generate/page.tsx",
-                            lineNumber: 84,
+                            lineNumber: 104,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -114,18 +141,18 @@ function GeneratePage() {
                             children: loading ? 'Generating...' : 'Generate'
                         }, void 0, false, {
                             fileName: "[project]/src/app/generate/page.tsx",
-                            lineNumber: 92,
+                            lineNumber: 112,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/app/generate/page.tsx",
-                    lineNumber: 83,
+                    lineNumber: 103,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/app/generate/page.tsx",
-                lineNumber: 82,
+                lineNumber: 102,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -136,26 +163,46 @@ function GeneratePage() {
                         children: error
                     }, void 0, false, {
                         fileName: "[project]/src/app/generate/page.tsx",
-                        lineNumber: 104,
+                        lineNumber: 124,
                         columnNumber: 11
                     }, this),
                     pokemonName && !imageUrl && !error && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "text-center mb-4",
-                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
-                            className: "text-xl font-bold text-[#2D1B2E] animate-pulse",
-                            children: [
-                                "Generating ",
-                                pokemonName,
-                                "..."
-                            ]
-                        }, void 0, true, {
-                            fileName: "[project]/src/app/generate/page.tsx",
-                            lineNumber: 108,
-                            columnNumber: 13
-                        }, this)
-                    }, void 0, false, {
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
+                                className: "text-xl font-bold text-[#2D1B2E] mb-4",
+                                children: [
+                                    "Generating ",
+                                    pokemonName,
+                                    "..."
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/src/app/generate/page.tsx",
+                                lineNumber: 128,
+                                columnNumber: 13
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "relative w-64 h-64 mx-auto",
+                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$image$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+                                    src: "/uia-unscreen.gif",
+                                    alt: "Loading...",
+                                    fill: true,
+                                    className: "object-contain pixelated",
+                                    priority: true
+                                }, void 0, false, {
+                                    fileName: "[project]/src/app/generate/page.tsx",
+                                    lineNumber: 132,
+                                    columnNumber: 15
+                                }, this)
+                            }, void 0, false, {
+                                fileName: "[project]/src/app/generate/page.tsx",
+                                lineNumber: 131,
+                                columnNumber: 13
+                            }, this)
+                        ]
+                    }, void 0, true, {
                         fileName: "[project]/src/app/generate/page.tsx",
-                        lineNumber: 107,
+                        lineNumber: 127,
                         columnNumber: 11
                     }, this),
                     imageUrl && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -166,7 +213,7 @@ function GeneratePage() {
                                 children: pokemonName
                             }, void 0, false, {
                                 fileName: "[project]/src/app/generate/page.tsx",
-                                lineNumber: 115,
+                                lineNumber: 144,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("img", {
@@ -175,7 +222,7 @@ function GeneratePage() {
                                 className: "max-w-full h-auto pixelated border-4 border-[#5A8087] rounded-lg"
                             }, void 0, false, {
                                 fileName: "[project]/src/app/generate/page.tsx",
-                                lineNumber: 118,
+                                lineNumber: 147,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
@@ -187,19 +234,19 @@ function GeneratePage() {
                                 children: "Download"
                             }, void 0, false, {
                                 fileName: "[project]/src/app/generate/page.tsx",
-                                lineNumber: 123,
+                                lineNumber: 152,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/generate/page.tsx",
-                        lineNumber: 114,
+                        lineNumber: 143,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/app/generate/page.tsx",
-                lineNumber: 102,
+                lineNumber: 122,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -209,30 +256,30 @@ function GeneratePage() {
                         className: "w-3 h-3 rounded-full bg-[#E0757C]"
                     }, void 0, false, {
                         fileName: "[project]/src/app/generate/page.tsx",
-                        lineNumber: 137,
+                        lineNumber: 166,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "w-3 h-3 rounded-full bg-[#E0757C]"
                     }, void 0, false, {
                         fileName: "[project]/src/app/generate/page.tsx",
-                        lineNumber: 138,
+                        lineNumber: 167,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/app/generate/page.tsx",
-                lineNumber: 136,
+                lineNumber: 165,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/app/generate/page.tsx",
-        lineNumber: 77,
+        lineNumber: 97,
         columnNumber: 5
     }, this);
 }
-_s(GeneratePage, "9gkWPWmIplmTCGtpz2j6A+2SFmM=");
+_s(GeneratePage, "RKqglh4GhgKJ7xqBqIbnfyxz45c=");
 _c = GeneratePage;
 var _c;
 __turbopack_refresh__.register(_c, "GeneratePage");

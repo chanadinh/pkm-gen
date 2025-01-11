@@ -1,7 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { OpenAI } from 'openai'
+import Image from 'next/image'
 
 const openai = new OpenAI({
   // apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
@@ -41,6 +42,25 @@ export default function GeneratePage() {
   const [imageUrl, setImageUrl] = useState('')
   const [error, setError] = useState('')
   const [pokemonName, setPokemonName] = useState('')
+  const [isPlaying, setIsPlaying] = useState(false)
+
+  // Handle audio playback during loading
+  useEffect(() => {
+    const audio = new Audio('/loading-sound.mp3')
+    audio.loop = true
+    
+    if (loading && !isPlaying) {
+      audio.play()
+        .then(() => setIsPlaying(true))
+        .catch(err => console.error('Audio playback failed:', err))
+    }
+    
+    return () => {
+      audio.pause()
+      audio.currentTime = 0
+      setIsPlaying(false)
+    }
+  }, [loading, isPlaying])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -56,7 +76,7 @@ export default function GeneratePage() {
       const response = await openai.images.generate({
         prompt: enhancedPrompt,
         n: 1,
-        size: "256x256",
+        size: "512x512",
         response_format: "url",
       })
 
@@ -105,9 +125,18 @@ export default function GeneratePage() {
         )}
         {pokemonName && !imageUrl && !error && (
           <div className="text-center mb-4">
-            <h3 className="text-xl font-bold text-[#2D1B2E] animate-pulse">
+            <h3 className="text-xl font-bold text-[#2D1B2E] mb-4">
               Generating {pokemonName}...
             </h3>
+            <div className="relative w-64 h-64 mx-auto">
+              <Image
+                src="/uia-unscreen.gif"
+                alt="Loading..."
+                fill
+                className="object-contain pixelated"
+                priority
+              />
+            </div>
           </div>
         )}
         {imageUrl && (
