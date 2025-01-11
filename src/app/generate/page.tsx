@@ -9,11 +9,38 @@ const openai = new OpenAI({
   dangerouslyAllowBrowser: true
 })
 
+const generatePokemonName = async (description: string) => {
+  try {
+    const response = await openai.chat.completions.create({
+      model: "gpt-3.5-turbo",
+      messages: [
+        {
+          role: "system",
+          content: "You are a Pokemon name generator. Generate a single creative Pokemon name (one word, no spaces) based on the description. The name should follow Pokemon naming conventions and be between 4-10 characters. Respond with just the name, nothing else."
+        },
+        {
+          role: "user",
+          content: description
+        }
+      ],
+      temperature: 0.7,
+      max_tokens: 10,
+    });
+
+    const name = response.choices[0]?.message?.content?.trim() || 'Mon';
+    return name;
+  } catch (error) {
+    console.error('Error generating name:', error);
+    return 'Mon';
+  }
+}
+
 export default function GeneratePage() {
   const [prompt, setPrompt] = useState('')
   const [loading, setLoading] = useState(false)
   const [imageUrl, setImageUrl] = useState('')
   const [error, setError] = useState('')
+  const [pokemonName, setPokemonName] = useState('')
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -21,7 +48,10 @@ export default function GeneratePage() {
     setError('')
     
     try {
-      const enhancedPrompt = `A pixel art Pokemon in GameBoy Advance style. ${prompt}. The image should look like it's from a GBA Pokemon game with rich colors and detailed sprites.`
+      // Generate name first
+      const name = await generatePokemonName(prompt)
+      setPokemonName(name)
+      const enhancedPrompt = `A pixel art Pokemon named ${name} in GameBoy Advance style. ${prompt}. The image should look like it's from a GBA Pokemon game with rich colors and detailed sprites.`
       
       const response = await openai.images.generate({
         prompt: enhancedPrompt,
@@ -73,8 +103,18 @@ export default function GeneratePage() {
         {error && (
           <p className="text-red-500 mb-4">{error}</p>
         )}
+        {pokemonName && !imageUrl && !error && (
+          <div className="text-center mb-4">
+            <h3 className="text-xl font-bold text-[#2D1B2E] animate-pulse">
+              Generating {pokemonName}...
+            </h3>
+          </div>
+        )}
         {imageUrl && (
           <div className="flex flex-col items-center">
+            <h3 className="text-xl font-bold mb-2 text-[#2D1B2E]">
+              {pokemonName}
+            </h3>
             <img 
               src={imageUrl} 
               alt="Generated Pokemon" 

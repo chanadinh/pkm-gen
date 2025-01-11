@@ -29,6 +29,10 @@
 - Images are generated at 256x256 resolution
 - Error handling and loading states included
 - Direct download link for generated images
+- Pokemon names are generated using OpenAI's GPT-3.5-turbo
+  - Uses chat completion to create unique, thematic names
+  - Names follow Pokemon naming conventions (4-10 characters)
+  - Fallback to "Mon" if generation fails
 
 ## Environment Variables
 Required environment variables:

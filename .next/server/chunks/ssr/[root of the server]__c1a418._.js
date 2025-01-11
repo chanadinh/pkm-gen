@@ -108,17 +108,45 @@ const openai = new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$
     apiKey: '',
     dangerouslyAllowBrowser: true
 });
+const generatePokemonName = async (description)=>{
+    try {
+        const response = await openai.chat.completions.create({
+            model: "gpt-3.5-turbo",
+            messages: [
+                {
+                    role: "system",
+                    content: "You are a Pokemon name generator. Generate a single creative Pokemon name (one word, no spaces) based on the description. The name should follow Pokemon naming conventions and be between 4-10 characters. Respond with just the name, nothing else."
+                },
+                {
+                    role: "user",
+                    content: description
+                }
+            ],
+            temperature: 0.7,
+            max_tokens: 10
+        });
+        const name = response.choices[0]?.message?.content?.trim() || 'Mon';
+        return name;
+    } catch (error) {
+        console.error('Error generating name:', error);
+        return 'Mon';
+    }
+};
 function GeneratePage() {
     const [prompt, setPrompt] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])('');
     const [loading, setLoading] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
     const [imageUrl, setImageUrl] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])('');
     const [error, setError] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])('');
+    const [pokemonName, setPokemonName] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])('');
     const handleSubmit = async (e)=>{
         e.preventDefault();
         setLoading(true);
         setError('');
         try {
-            const enhancedPrompt = `A pixel art Pokemon in GameBoy Advance style. ${prompt}. The image should look like it's from a GBA Pokemon game with rich colors and detailed sprites.`;
+            // Generate name first
+            const name = await generatePokemonName(prompt);
+            setPokemonName(name);
+            const enhancedPrompt = `A pixel art Pokemon named ${name} in GameBoy Advance style. ${prompt}. The image should look like it's from a GBA Pokemon game with rich colors and detailed sprites.`;
             const response = await openai.images.generate({
                 prompt: enhancedPrompt,
                 n: 1,
@@ -145,7 +173,7 @@ function GeneratePage() {
                 children: "Generate Pokemon"
             }, void 0, false, {
                 fileName: "[project]/src/app/generate/page.tsx",
-                lineNumber: 48,
+                lineNumber: 78,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -162,7 +190,7 @@ function GeneratePage() {
                             rows: 4
                         }, void 0, false, {
                             fileName: "[project]/src/app/generate/page.tsx",
-                            lineNumber: 54,
+                            lineNumber: 84,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -172,18 +200,18 @@ function GeneratePage() {
                             children: loading ? 'Generating...' : 'Generate'
                         }, void 0, false, {
                             fileName: "[project]/src/app/generate/page.tsx",
-                            lineNumber: 62,
+                            lineNumber: 92,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/app/generate/page.tsx",
-                    lineNumber: 53,
+                    lineNumber: 83,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/app/generate/page.tsx",
-                lineNumber: 52,
+                lineNumber: 82,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -194,19 +222,46 @@ function GeneratePage() {
                         children: error
                     }, void 0, false, {
                         fileName: "[project]/src/app/generate/page.tsx",
-                        lineNumber: 74,
+                        lineNumber: 104,
+                        columnNumber: 11
+                    }, this),
+                    pokemonName && !imageUrl && !error && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "text-center mb-4",
+                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
+                            className: "text-xl font-bold text-[#2D1B2E] animate-pulse",
+                            children: [
+                                "Generating ",
+                                pokemonName,
+                                "..."
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/src/app/generate/page.tsx",
+                            lineNumber: 108,
+                            columnNumber: 13
+                        }, this)
+                    }, void 0, false, {
+                        fileName: "[project]/src/app/generate/page.tsx",
+                        lineNumber: 107,
                         columnNumber: 11
                     }, this),
                     imageUrl && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "flex flex-col items-center",
                         children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
+                                className: "text-xl font-bold mb-2 text-[#2D1B2E]",
+                                children: pokemonName
+                            }, void 0, false, {
+                                fileName: "[project]/src/app/generate/page.tsx",
+                                lineNumber: 115,
+                                columnNumber: 13
+                            }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("img", {
                                 src: imageUrl,
                                 alt: "Generated Pokemon",
                                 className: "max-w-full h-auto pixelated border-4 border-[#5A8087] rounded-lg"
                             }, void 0, false, {
                                 fileName: "[project]/src/app/generate/page.tsx",
-                                lineNumber: 78,
+                                lineNumber: 118,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
@@ -218,19 +273,19 @@ function GeneratePage() {
                                 children: "Download"
                             }, void 0, false, {
                                 fileName: "[project]/src/app/generate/page.tsx",
-                                lineNumber: 83,
+                                lineNumber: 123,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/generate/page.tsx",
-                        lineNumber: 77,
+                        lineNumber: 114,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/app/generate/page.tsx",
-                lineNumber: 72,
+                lineNumber: 102,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -240,26 +295,26 @@ function GeneratePage() {
                         className: "w-3 h-3 rounded-full bg-[#E0757C]"
                     }, void 0, false, {
                         fileName: "[project]/src/app/generate/page.tsx",
-                        lineNumber: 97,
+                        lineNumber: 137,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "w-3 h-3 rounded-full bg-[#E0757C]"
                     }, void 0, false, {
                         fileName: "[project]/src/app/generate/page.tsx",
-                        lineNumber: 98,
+                        lineNumber: 138,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/app/generate/page.tsx",
-                lineNumber: 96,
+                lineNumber: 136,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/app/generate/page.tsx",
-        lineNumber: 47,
+        lineNumber: 77,
         columnNumber: 5
     }, this);
 }
